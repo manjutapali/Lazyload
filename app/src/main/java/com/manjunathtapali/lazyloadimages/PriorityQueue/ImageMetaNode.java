@@ -23,4 +23,9 @@ public class ImageMetaNode {
         this.priority = 2;
         this.next = null;
     }
+
+    public String getImagePath()
+    {
+        return ImagePath;
+    }
 }

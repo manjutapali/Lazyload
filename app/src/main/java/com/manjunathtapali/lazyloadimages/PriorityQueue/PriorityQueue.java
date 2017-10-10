@@ -2,6 +2,9 @@ package com.manjunathtapali.lazyloadimages.PriorityQueue;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by tapalim on 9/29/17.
  */
@@ -128,5 +131,19 @@ public class PriorityQueue {
             runnr = runnr.next;
             count++;
         }
+    }
+
+    public List<ImageMetaNode> getList()
+    {
+        List<ImageMetaNode> images = new ArrayList<ImageMetaNode>();
+        ImageMetaNode runnr = head;
+
+        while (runnr != null)
+        {
+            images.add(runnr);
+            runnr = runnr.next;
+        }
+
+        return images;
     }
 }

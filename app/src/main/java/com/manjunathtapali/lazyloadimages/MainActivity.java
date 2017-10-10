@@ -3,6 +3,9 @@ package com.manjunathtapali.lazyloadimages;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,7 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.manjunathtapali.lazyloadimages.PriorityQueue.ImageMetaNode;
 import com.manjunathtapali.lazyloadimages.PriorityQueue.PriorityQueue;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -21,27 +27,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.list_images);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        //drawer.setDrawerListener(toggle);
+        //toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         DisplayImages();
     }
@@ -50,16 +57,24 @@ public class MainActivity extends AppCompatActivity
         PriorityQueue queue = new PriorityQueue();
 
 
-        queue.add("nsdjdnjsnd", PriorityQueue.Priority.HIGH);
-        queue.add("abcbc", PriorityQueue.Priority.HIGH);
-        queue.add("ababab", PriorityQueue.Priority.LOW);
-        queue.add("hhjdhfjd", PriorityQueue.Priority.MEDIUM);
-        queue.add("sdnsndjls", PriorityQueue.Priority.MEDIUM);
-        queue.add("dsknds", PriorityQueue.Priority.HIGH);
-        queue.add("cscdc", PriorityQueue.Priority.LOW);
-        queue.add("xzxcscd", PriorityQueue.Priority.HIGH);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.HIGH);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.HIGH);
+        queue.add("http://fakeimg.pl/250x100/ff0000/", PriorityQueue.Priority.LOW);
+        queue.add("http://fakeimg.pl/250x100", PriorityQueue.Priority.MEDIUM);
+        queue.add("http://fakeimg.pl/250x100", PriorityQueue.Priority.MEDIUM);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.HIGH);
+        queue.add("http://fakeimg.pl/250x100/ff0000/", PriorityQueue.Priority.LOW);
+        queue.add("http://fakeimg.pl/250x100/ff0000/", PriorityQueue.Priority.HIGH);
 
         queue.Display();
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_images);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        List<ImageMetaNode> images = queue.getList();
+        CustomAdapter adapter = new CustomAdapter(this, images);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

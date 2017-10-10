@@ -1,12 +1,15 @@
+package com.manjunathtapali.lazyloadimages;
+
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.manjunathtapali.lazyloadimages.LazyLoaders.LazyLoad;
 import com.manjunathtapali.lazyloadimages.PriorityQueue.ImageMetaNode;
-import com.manjunathtapali.lazyloadimages.R;
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ImageViewH
     {
         this.context = context;
         this.images = images;
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -36,7 +40,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ImageViewH
 
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
-
+        ImageMetaNode node = images.get(position);
+        LazyLoad loader = new LazyLoad();
+        Drawable drawable = loader.GetImage(node.getImagePath());
+        holder.imageView.setImageDrawable(drawable);
     }
 
     @Override

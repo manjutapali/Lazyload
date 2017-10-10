@@ -34,7 +34,6 @@ public class LazyLoad {
         {
             InputStream img = GetImageFile(ImageURL);
             drawable = DrawableWrapper.createFromStream(img, "img");
-
             ImageStorer.put(ImageURL, drawable);
         }
         catch (Exception e)
