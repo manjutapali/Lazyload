@@ -33,27 +33,21 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        /*fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawer.setDrawerListener(toggle);
-        //toggle.syncState();
 
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.lists);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-        DisplayImages();
+        List<ImageMetaNode> images = DisplayImages();
+        CustomAdapter adapter = new CustomAdapter(this, images);
+        recyclerView.setAdapter(adapter);
     }
 
-    private void DisplayImages() {
+    private List<ImageMetaNode> DisplayImages() {
         PriorityQueue queue = new PriorityQueue();
 
 
@@ -68,13 +62,9 @@ public class MainActivity extends AppCompatActivity
 
         queue.Display();
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_images);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
         List<ImageMetaNode> images = queue.getList();
-        CustomAdapter adapter = new CustomAdapter(this, images);
-        recyclerView.setAdapter(adapter);
+
+        return images;
     }
 
     @Override

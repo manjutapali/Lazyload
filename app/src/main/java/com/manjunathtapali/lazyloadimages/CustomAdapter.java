@@ -41,9 +41,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ImageViewH
     @Override
     public void onBindViewHolder(ImageViewHolder holder, int position) {
         ImageMetaNode node = images.get(position);
+
+        /*
         LazyLoad loader = new LazyLoad();
         Drawable drawable = loader.GetImage(node.getImagePath());
         holder.imageView.setImageDrawable(drawable);
+        */
+
+        LazyLoad.GetImage(node.getImagePath(), context, holder.imageView);
+
     }
 
     @Override

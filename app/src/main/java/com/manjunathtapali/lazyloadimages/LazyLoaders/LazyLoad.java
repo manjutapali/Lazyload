@@ -1,7 +1,10 @@
 package com.manjunathtapali.lazyloadimages.LazyLoaders;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableWrapper;
+import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,43 +19,60 @@ import okhttp3.Response;
  */
 
 public class LazyLoad {
-    private static HashMap<String, Drawable> ImageStorer = null;
+    private static HashMap<String, Drawable> ImageStorer = new HashMap<>();
+    private static InputStream inputStream;
 
-    public LazyLoad()
-    {
-        ImageStorer = new HashMap<>();
-    }
-
-    public Drawable GetImage(String ImageURL)
+    public static void GetImage(final String ImageURL, Context mContext, final ImageView view)
     {
         if(ImageStorer.containsKey(ImageURL))
         {
-            return ImageStorer.get(ImageURL);
+            view.setImageDrawable(ImageStorer.get(ImageURL));
         }
-        Drawable drawable = null;
+        final Drawable[] drawable = {null};
         try
         {
-            InputStream img = GetImageFile(ImageURL);
-            drawable = DrawableWrapper.createFromStream(img, "img");
-            ImageStorer.put(ImageURL, drawable);
+
+            Loader loader = new Loader() {
+                @Override
+                public void success() {
+                    drawable[0] = DrawableWrapper.createFromStream(inputStream, "img");
+                    view.setImageDrawable(drawable[0]);
+                }
+
+                @Override
+                public void failure() {
+                    Log.e("LazyLoad", "Image loading is failed");
+                }
+            };
+
+
+
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            drawable = null;
+
         }
 
-        return drawable;
+
     }
 
-    private InputStream GetImageFile(String ImageURL) throws IOException
+    private void GetImageFile(String ImageURL, Loader loader) throws IOException
     {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(ImageURL).build();
 
         Response response = client.newCall(request).execute();
-        InputStream inputStream =  response.body().byteStream();
+        inputStream =  response.body().byteStream();
 
-        return inputStream;
+        if(inputStream != null)
+        {
+            loader.success();
+        }
+        else
+        {
+            loader.failure();
+        }
+
     }
 }
