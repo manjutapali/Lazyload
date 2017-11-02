@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity
         List<ImageMetaNode> images = DisplayImages();
         CustomAdapter adapter = new CustomAdapter(this, images);
         recyclerView.setAdapter(adapter);
+
+
     }
 
     private List<ImageMetaNode> DisplayImages() {
@@ -53,12 +55,12 @@ public class MainActivity extends AppCompatActivity
 
         queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.HIGH);
         queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.HIGH);
-        queue.add("http://fakeimg.pl/250x100/ff0000/", PriorityQueue.Priority.LOW);
-        queue.add("http://fakeimg.pl/250x100", PriorityQueue.Priority.MEDIUM);
-        queue.add("http://fakeimg.pl/250x100", PriorityQueue.Priority.MEDIUM);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.LOW);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.MEDIUM);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.MEDIUM);
         queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.HIGH);
-        queue.add("http://fakeimg.pl/250x100/ff0000/", PriorityQueue.Priority.LOW);
-        queue.add("http://fakeimg.pl/250x100/ff0000/", PriorityQueue.Priority.HIGH);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.LOW);
+        queue.add("http://fakeimg.pl/300/", PriorityQueue.Priority.HIGH);
 
         queue.Display();
 

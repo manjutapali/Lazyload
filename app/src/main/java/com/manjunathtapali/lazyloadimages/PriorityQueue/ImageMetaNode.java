@@ -28,4 +28,9 @@ public class ImageMetaNode {
     {
         return ImagePath;
     }
+
+    public int getPriority()
+    {
+        return priority;
+    }
 }

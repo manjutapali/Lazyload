@@ -1,5 +1,6 @@
 package com.manjunathtapali.lazyloadimages;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.manjunathtapali.lazyloadimages.LazyLoaders.LazyLoad;
 import com.manjunathtapali.lazyloadimages.PriorityQueue.ImageMetaNode;
@@ -32,7 +34,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ImageViewH
 
     @Override
     public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.list_images, parent, false);
+        View view = layoutInflater.inflate(R.layout.image_item, parent, false);
         ImageViewHolder viewHolder = new ImageViewHolder(view);
 
         return viewHolder;
@@ -49,7 +51,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ImageViewH
         */
 
         LazyLoad.GetImage(node.getImagePath(), context, holder.imageView);
-
+        holder.textView.setText(String.valueOf(node.getPriority()));
     }
 
     @Override
@@ -63,9 +65,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ImageViewH
     class ImageViewHolder extends RecyclerView.ViewHolder
     {
         ImageView imageView;
+        TextView textView;
         public ImageViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.img);
+            textView = (TextView) itemView.findViewById(R.id.priority);
         }
     }
 }

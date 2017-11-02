@@ -1,5 +1,6 @@
 package com.manjunathtapali.lazyloadimages.LazyLoaders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableWrapper;
@@ -22,8 +23,11 @@ public class LazyLoad {
     private static HashMap<String, Drawable> ImageStorer = new HashMap<>();
     private static InputStream inputStream;
 
-    public static void GetImage(final String ImageURL, Context mContext, final ImageView view)
+
+    public static void GetImage(final String ImageURL, final Context mContext, final ImageView view)
     {
+
+
         if(ImageStorer.containsKey(ImageURL))
         {
             view.setImageDrawable(ImageStorer.get(ImageURL));
@@ -32,11 +36,18 @@ public class LazyLoad {
         try
         {
 
-            Loader loader = new Loader() {
+            final Loader loader = new Loader() {
                 @Override
                 public void success() {
-                    drawable[0] = DrawableWrapper.createFromStream(inputStream, "img");
-                    view.setImageDrawable(drawable[0]);
+                    Log.d("LazyLoad", "Image loading successful");
+                    ((Activity)mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            drawable[0] = DrawableWrapper.createFromStream(inputStream, "img");
+                            view.setImageDrawable(drawable[0]);
+                        }
+                    });
+
                 }
 
                 @Override
@@ -45,6 +56,16 @@ public class LazyLoad {
                 }
             };
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        GetImageFile(ImageURL, loader);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
 
 
         }
@@ -57,7 +78,7 @@ public class LazyLoad {
 
     }
 
-    private void GetImageFile(String ImageURL, Loader loader) throws IOException
+    private static void GetImageFile(String ImageURL, Loader loader) throws IOException
     {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(ImageURL).build();
